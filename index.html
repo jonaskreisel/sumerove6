@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumerove.eu | Starověká Mezopotámie</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET A ZÁKLADNÍ NASTAVENÍ --- */
+        :root {
+            --color-lapis: #1e3a5f; /* Lapis Lazuli - královská modř */
+            --color-gold: #c5a059; /* Zlatá */
+            --color-clay: #fdfbf7; /* Světlý pergamen/hlína */
+            --color-text: #2c241b; /* Tmavá zemitá pro text */
+            --color-accent: #8b4513; /* Terakota */
+            --color-void: #1a1510; /* Velmi tmavá hnědá pro Kur */
+            --spacing: 2rem;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--color-clay);
+            color: var(--color-text);
+            line-height: 1.8;
+            overflow-x: hidden;
+            background-image: radial-gradient(#e6e2d3 1px, transparent 1px);
+            background-size: 20px 20px; /* Jemná textura */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--color-lapis);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        /* --- NAVIGACE --- */
+        header {
+            background-color: var(--color-lapis);
+            color: var(--color-gold);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-bottom: 3px solid var(--color-gold);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Cinzel', serif;
+            color: var(--color-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            font-size: 2rem; /* Symbol klínového písma */
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            flex-wrap: wrap; /* Aby se menu zalomilo na menších monitorech */
+        }
+
+        nav a {
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 5px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: var(--color-clay);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobilní menu tlačítko */
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-gold);
+        }
+
+        /* --- HERO SEKCE --- */
+        .hero {
+            background: linear-gradient(rgba(30, 58, 95, 0.9), rgba(30, 58, 95, 0.7)), url('https://images.unsplash.com/photo-1599596662939-6f9876274717?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            color: #e0e0e0;
+        }
+
+        .hero::after {
+            content: "𒀭"; /* Klínový znak pro Boha/Hvězdu */
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            color: var(--color-lapis);
+            text-shadow: 0 0 5px var(--color-gold);
+            background: var(--color-clay);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- HLAVNÍ OBSAH --- */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 6rem;
+            opacity: 0; /* Pro animaci */
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+            scroll-margin-top: 100px; /* Aby header nepřekrýval nadpis po kliknutí */
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--color-gold);
+            margin: 10px auto;
+        }
+
+        .intro-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* --- GRIDY --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e0d8c3;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--color-lapis);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+            color: var(--color-accent);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, transparent 50%, var(--color-gold) 50%);
+            opacity: 0.3;
+        }
+
+        /* --- ZIKKURATY --- */
+        .ziggurat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .ziggurat-item {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            padding: 2rem;
+            border-left: 4px solid var(--color-gold);
+            box-shadow: var(--shadow);
+        }
+
+        /* --- MÝTY --- */
+        .myth-block {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e0d8c3;
+        }
+
+        .myth-block h3 {
+            color: var(--color-lapis);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .myth-block h3::before {
+            content: "✦";
+            color: var(--color-gold);
+        }
+
+        /* --- KUR (PODSVĚTÍ) SPECIAL STYLING --- */
+        .kur-container {
+            background-color: var(--color-void);
+            color: #dcdcdc;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            border: 1px solid #3d332a;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kur-container h3, .kur-container h2 {
+            color: #a89f91;
+            border-bottom-color: #554a3f;
+        }
+        
+        .kur-container p {
+            color: #bdbdbd;
+        }
+
+        .kur-container::before {
+            content: "𒆳"; /* Znak pro zemi/horu/podsvětí (Kur) */
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 15rem;
+            color: rgba(255,255,255,0.03);
+            pointer-events: none;
+            font-family: sans-serif;
+        }
+
+        /* --- SPECIAL SECTIONS --- */
+        .highlight-box {
+            background-color: rgba(197, 160, 89, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--color-lapis);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--color-lapis);
+            color: #fff;
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-top: 4rem;
+            border-top: 5px solid var(--color-gold);
+        }
+
+        footer p {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .footer-symbol {
+            font-size: 2rem;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* --- RESPONSIVITA --- */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 0 1rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-lapis);
+                padding: 1rem 0;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            nav a {
+                display: block;
+                text-align: center;
+                padding: 10px 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .kur-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo"><span>𒀭</span> Sumerove.eu</a>
+            <div class="menu-toggle" id="mobile-menu">☰</div>
+            <nav>
+                <ul id="nav-list">
+                    <li><a href="#uvod">Úvod</a></li>
+                    <li><a href="#bozstva">Božstva</a></li>
+                    <li><a href="#zikkuraty">Zikkuraty</a></li>
+                    <li><a href="#ritualy">Rituály</a></li>
+                    <li><a href="#myty">Mýty</a></li>
+                    <li><a href="#kur">Říše Kur</a></li> <li><a href="#demoni">Démoni</a></li>
+                    <li><a href="#modlitby">Modlitby</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Starověká Mezopotámie</h1>
+        <p>Kolébka civilizace, svět bohů, králů a prvních měst.</p>
+    </div>
+
+    <main>
+        <section id="uvod">
+            <h2 class="section-title">Vítejte v zemi mezi řekami</h2>
+            <div class="intro-text">
+                <p>Starověká Mezopotámie, ležící mezi řekami Eufrat a Tigris, byla kolébkou jedné z nejstarších civilizací světa. Náboženství hrálo v životě jejích obyvatel naprosto klíčovou roli – ovlivňovalo politiku, zákony, vědu i každodenní zvyky. Mezopotámci věřili v množství bohů a bohyní, kteří vládli různým oblastem přírody i lidského života. Každé město mělo svého ochránce, jehož sídlem byl chrám či monumentální zikkurat.</p>
+                <p>Víra nebyla jen soukromou záležitostí – obřady, slavnosti a oběti byly veřejnými událostmi, které měly zajistit přízeň bohů a udržet řád ve světě. Představy o podsvětí, příběhy o stvoření a hrdinské mýty se zachovaly na hliněných tabulkách psaných klínovým písmem a dodnes nám přibližují duchovní svět prvních městských kultur.</p>
+                <p>Na tomto webu se seznámíte s hlavními mezopotámskými bohy, posvátnými chrámy a zikkuraty, rituály a slavnostmi i s legendami, které dodnes ovlivňují naše chápání mýtů a náboženství.</p>
+            </div>
+        </section>
+
+        <section id="bozstva">
+            <h2 class="section-title">Panteon Bohů</h2>
+            <p class="intro-text">Náboženský svět Mezopotámie byl mimořádně bohatý a rozmanitý. Obyvatelé věřili v množství bohů a bohyní, kteří ovládali přírodní síly i lidský osud.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h3>An (Anu)</h3>
+                    <p>An byl nejvyšší bůh mezopotámského panteonu a zosobňoval samotné nebe. V sumerštině jeho jméno znamená právě „nebe“, a proto byl považován za původce kosmu i všech ostatních bohů. Kult boha Ana zdůrazňoval majestát a nedostupnost božské sféry.</p>
+                </div>
+                <div class="card">
+                    <h3>Enlil</h3>
+                    <p>Enlil patřil k nejmocnějším bohům Mezopotámie a byl pánem větru, vzduchu i bouří. Jeho jméno znamená „Pán dechů“. Byl považován za rozhodující autoritu v božském shromáždění a jeho sídlem bylo posvátné město Nippur.</p>
+                </div>
+                <div class="card">
+                    <h3>Enki</h3>
+                    <p>Enki byl významný bůh moudrosti, magie, řemesel a stvoření, vládce sladkých podzemních vod (abzu). V mýtech často vystupoval jako ochránce lidí, kterým pomáhal svou chytrostí a diplomacií. </p>
+                </div>
+                <div class="card">
+                    <h3>Inanna (Ištar)</h3>
+                    <p>Inanna byla jednou z nejvýraznějších bohyň, zosobněním lásky, sexuality, plodnosti, ale také války. Její povaha byla rozporuplná. Nejznámější mýtus vypráví o jejím sestupu do podsvětí.</p>
+                </div>
+                <div class="card">
+                    <h3>Marduk</h3>
+                    <p>Marduk se stal hlavním bohem Babylonu. Podle eposu Enúma eliš porazil pramořskou bohyni Tiamat a stvořil svět. Byl chápán jako vládce řádu, spravedlnosti a moudrosti.</p>
+                </div>
+                <div class="card">
+                    <h3>Utu (Šamaš)</h3>
+                    <p>Utu byl bůh slunce, spravedlnosti a pravdy. Každý den vyjížděl na nebe a osvětloval svět, čímž odhaloval lež. Byl vnímán jako ochránce slabých a nejvyšší soudce.</p>
+                </div>
+                <div class="card">
+                    <h3>Ereshkigal</h3>
+                    <p>Ereškigal byla vládkyní podsvětí (Irkalla). Sestra Inanny, ztělesňovala temnou stránku existence – smrt a nevyhnutelnost osudu. Vládla přísně a symbolizovala hranici mezi světem živých a mrtvých.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="zikkuraty">
+            <h2 class="section-title">Zikkuraty: Schodiště k bohům</h2>
+            <div class="intro-text">
+                <p>Zikkuraty patří mezi nejvýraznější symboly mezopotámské architektury. Tyto monumentální stupňovité věže sloužily jako most mezi nebem a zemí. Na jejich vrcholu se nacházel svatostánek, kam měli přístup jen kněží.</p>
+            </div>
+            
+            <div class="ziggurat-container">
+                <div class="ziggurat-item">
+                    <h3>Zikkurat v Uru</h3>
+                    <p>Jedna z nejznámějších a nejlépe dochovaných staveb. Vybudován kolem roku 2100 př. n. l. králem Urnammu pro měsíčního boha Nannu. Symbolizoval moc a božskou legitimitu sumerských vládců.</p>
+                </div>
+                <div class="ziggurat-item">
+                    <h3>Etemenanki (Babylon)</h3>
+                    <p>„Dům základu nebe a země“. Hlavní chrám boha Marduka v Babylonu, který mohl dosahovat výšky až 90 metrů. Často spojován s biblickou Babylonskou věží.</p>
+                </div>
+                <div class="ziggurat-item">
+                    <h3>Eanna (Uruk)</h3>
+                    <p>Zikkurat zasvěcený bohyni Inanně. Komplex Eanna („Dům nebes“) patřil k nejstarším a hrál zásadní roli v Uruku. Podle tradice je spjat i s králem Gilgamešem.</p>
+                </div>
+                <div class="ziggurat-item">
+                    <h3>E-abzu (Eridu)</h3>
+                    <p>Zasvěcen bohu Enkimu v nejstarším městě Eridu. Podle tradice zde začaly dějiny civilizace, protože Enki zde šířil posvátné 'me'.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ritualy">
+            <h2 class="section-title">Posvátné Rituály</h2>
+            <div class="highlight-box">
+                <p>Rituály tvořily základ náboženského života. Denní obřady v chrámech zahrnovaly dary jídla a pití, které bohové „konzumovali“. Velký význam měly slavnosti jako novoroční Akitu, kde se obnovoval řád světa.</p>
+                <p>Součástí bylo i věštění z jater obětních zvířat nebo pohybu hvězd – tak vznikla astronomie. Rituály nebyly jen formalitou, ale nutností pro udržení chodu vesmíru, úrody a ochrany města.</p>
+            </div>
+        </section>
+
+        <section id="myty">
+            <h2 class="section-title">Mýty a Eposy</h2>
+            <p class="intro-text">Příběhy zapsané na hliněných tabulkách, které vysvětlovaly původ světa a smysl života.</p>
+
+            <div class="myth-block">
+                <h3>Epos o Gilgamešovi</h3>
+                <p>Nejstarší epos světa o hledání nesmrtelnosti. Král Gilgameš a jeho přítel Enkidu prožívají dobrodružství, ale po smrti Enkidua Gilgameš zjišťuje, že věčný život není pro lidi – smysl života je v činech, které po nás zůstanou.</p>
+            </div>
+
+            <div class="myth-block">
+                <h3>Enúma Eliš</h3>
+                <p>Babylonský epos o stvoření. Popisuje boj mladých bohů v čele s Mardukem proti chaosu (Tiamat). Z těla Tiamat Marduk stvořil svět a z krve Kingua lidstvo, aby sloužilo bohům.</p>
+            </div>
+
+            <div class="myth-block">
+                <h3>Inannin sestup do podsvětí</h3>
+                <p>Bohyně Inanna prochází sedmi branami podsvětí, kde je zbavena moci a zabita svou sestrou Ereškigal. Je oživena, ale musí za sebe najít náhradu, což vede k cyklu ročních období.</p>
+            </div>
+
+            <div class="myth-block">
+                <h3>Enki a světový řád</h3>
+                <p>Bůh Enki organizuje svět, rozděluje funkce bohům a dává lidem civilizační dovednosti. Ukazuje bohy jako dárce kultury, ne jen jako ničivé síly.</p>
+            </div>
+
+            <div class="myth-block">
+                <h3>Inanna a Enki</h3>
+                <p>Mýtus o tom, jak Inanna opila moudrého Enkiho a lstí získala „me“ – posvátné principy civilizace, které odvezla do svého města Uruku.</p>
+            </div>
+        </section>
+
+        <section id="kur">
+            <div class="kur-container">
+                <h2 class="section-title" style="color: #a89f91;">Kur – Říše, odkud není návratu</h2>
+                <p><strong>Kur</strong>, sumerský výraz pro „horu“ či „cizí zemi“, se stal synonymem pro podsvětí – temnou říši mrtvých, která se rozkládala hluboko pod světem živých a oceánem sladkých vod Abzu. Byla to chmurná, prašná pláň, kde vládla neúprosná bohyně Ereškigal se svým chotěm Nergalem.</p>
+                
+                <p>Pro starověké Mezopotámce nebyla smrt vysvobozením do ráje, ale nevyhnutelným přechodem do šedé existence. Věřilo se, že duše zemřelých (<em>gidim</em>) zde bloudí ve tmě, oblečeny do ptačího peří, a jejich jedinou potravou je prach a jíl. Neexistovalo zde světlo, pouze věčný stín.</p>
+
+                <p>Osud mrtvých však nebyl zcela beznadějný – závisel na paměti živých. Pokud rodina pravidelně přinášela obětiny jídla a vody (libace) k hrobům, mohl duch v Kuru nalézt klid. Běda však těm, na které se zapomnělo; stávali se z nich neklidní přízraky, které se vracely na zem škodit živým.</p>
+                
+                <p>Brány Kuru střežil vrátný Neti a vstup do něj byl pro běžné smrtelníky nevratný. Přesto mezopotámské mýty vyprávějí o hrdinech a bozích, jako byla Inanna, Enkidu nebo Nergal, kteří se odvážili překročit jeho práh, pohlédnout smrti do tváře a někteří se dokonce vrátit zpět.</p>
+            </div>
+        </section>
+
+        <section id="demoni">
+            <div class="card-grid">
+                <div class="card" style="border-top-color: var(--color-accent);">
+                    <h3>Démoni: Pazuzu a Lamashtu</h3>
+                    <p>Démoni nebyli jen zlí – zosobňovali chaos a nemoci. Hrozivá <strong>Lamashtu</strong> ohrožovala rodičky, zatímco démon větru <strong>Pazuzu</strong>, ač děsivý, byl vzýván jako její protivník a ochránce. Svět démonů ukazoval složitost boje dobra a zla.</p>
+                </div>
+                <div class="card" style="border-top-color: var(--color-gold);">
+                    <h3>Me a Melammu</h3>
+                    <p><strong>Me</strong> byly posvátné kosmické řády a principy civilizace (řemesla, království, zákony). <strong>Melammu</strong> byla božská záře či aura, která obklopovala bohy a krále, vzbuzovala posvátnou hrůzu a respekt.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="modlitby">
+            <h2 class="section-title">Hlas k bohům</h2>
+            <div class="intro-text">
+                <p>Modlitba (šu-illa, „pozvednutí rukou“) byla způsobem, jak čelit osudu. Skládala se z chvály boha a konkrétní prosby. Byla to hluboká osobní i veřejná komunikace, která propojovala smrtelníky s nadpřirozeným světem.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <span class="footer-symbol">𒀭</span>
+        <p>&copy; 2024 Sumerove.eu | Brána do světa Mezopotámie</p>
+        <p>Vytvořeno s úctou ke starým mistrům klínového písma.</p>
+    </footer>
+
+    <script>
+        // Jednoduchý skript pro mobilní menu
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+
+        // Zavření menu po kliknutí na odkaz
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navList.classList.remove('active');
+            });
+        });
+
+        // Animace při scrollování (Intersection Observer)
+        const sections = document.querySelectorAll('section');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
